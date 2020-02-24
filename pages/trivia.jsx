@@ -52,7 +52,7 @@ const Trivia = (props) => {
             {objective.trivia.map((trivia, index) => (
               <Typography className="title" variant="h5" gutterBottom>
                 {trivia.pregunta}
-                {trivia.respuestas.map(respuesta => (
+                    {trivia.respuestas.map((respuesta) => (
                   <FormControl component="fieldset">
                     <RadioGroup
                       aria-label={`Pregunta${trivia.idPregunta}`}
