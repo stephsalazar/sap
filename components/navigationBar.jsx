@@ -84,5 +84,4 @@ const NavigationBar = () => (
     </style>
   </>
 );
-
 export default NavigationBar;
