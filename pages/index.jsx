@@ -1,34 +1,9 @@
 import React from 'react';
 import Router from 'next/router';
-import withStyles from '@material-ui/core/styles/withStyles';
 import imageMobile from '../images/splash-mobile.png';
 import imageTablet from '../images/splash-tablet.png';
 import imageDesktop from '../images/splash-desktop.png';
 
-const styles = (theme => ({
-  root: {
-    whidth: '100%',
-    height: '100vh',
-    [theme.breakpoints.up('xs')]:
-    {
-      backgroundImage: `url(${imageMobile})`,
-      backgroundPosition: 'center',
-      backgroundSize: 'cover',
-    },
-    [theme.breakpoints.up('md')]: {
-      backgroundImage: `url(${imageTablet})`,
-      backgroundPosition: 'center center',
-      backgroundSize: 'cover',
-    },
-    [theme.breakpoints.up('lg')]: {
-      backgroundImage: `url(${imageDesktop})`,
-      backgroundPosition: 'center center',
-      backgroundRepeat: 'no-repeat',
-      backgroundAttachment: 'fixed',
-      backgroundSize: 'cover',
-    },
-  },
-}));
 
 class App extends React.Component {
   componentDidMount() {
@@ -38,14 +13,47 @@ class App extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
-
     return (
-      <div className={classes.root}>
+      <div className="root">
         <style jsx global>
           {`
             body {
               margin: 0;
+            }
+            .root {
+              height: 100vh;
+            }
+            @media screen and (max-width: 640px) and (min-width: 0px) {
+              .root {
+                background-image: url(${imageMobile});
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+              }
+            }
+            @media screen and (max-width: 1007px) and (min-width: 641px) {
+              .root {
+                background-image: url(${imageTablet});
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+              }
+            }
+            @media screen and (min-width: 1024px) {
+              .root {
+                background-image: url(${imageTablet});
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+              }
+            }
+            @media screen and (min-width: 1280px) {
+              .root {
+                background-image: url(${imageDesktop});
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+              }
             }
           `}
         </style>
@@ -54,4 +62,4 @@ class App extends React.Component {
   }
 }
 
-export default withStyles(styles)(App);
+export default App;
