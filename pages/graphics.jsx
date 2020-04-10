@@ -1,50 +1,53 @@
+/* eslint-disable no-console */
 import React from 'react';
 import Chart from 'chart.js';
+import Typography from '@material-ui/core/Typography';
+import countrys from '../map-world';
 import NavigationBar from '../components/navigationBar';
 
 const objetivos = [
   {
-    label: 'objetivo 1',
+    label: 'objetivo 1 ',
     value: '15',
     color: '#eb1c2d',
   },
   {
-    label: 'objetivo 2',
+    label: 'objetivo 2 ',
     value: '11',
     color: '#D3A029',
   },
   {
-    label: 'objetivo 3',
+    label: 'objetivo 3 ',
     value: '5',
     color: '#279B48',
   },
   {
-    label: 'objetivo 4',
+    label: 'objetivo 4 ',
     value: '2',
     color: '#C31F33',
   },
   {
-    label: 'objetivo 5',
+    label: 'objetivo 5 ',
     value: '7',
     color: '#EF402B',
   },
   {
-    label: 'objetivo 6',
+    label: 'objetivo 6 ',
     value: '5',
     color: '#26AED9',
   },
   {
-    label: 'objetivo 7',
+    label: 'objetivo 7 ',
     value: '1',
     color: '#FCB712',
   },
   {
-    label: 'objetivo 8',
+    label: 'objetivo 8 ',
     value: '1',
     color: '#8F1838',
   },
   {
-    label: 'objetivo 9',
+    label: 'objetivo 9 ',
     value: '2',
     color: '#F36D26',
   },
@@ -157,6 +160,44 @@ class DoughnutChart extends React.Component {
   }
 }
 
+class Map extends React.Component {
+  constructor(props) {
+    super(props);
+    this.selectedCountry = this.selectedCountry.bind(this);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  selectedCountry(country) {
+    console.log('country', country.id);
+  }
+
+  render() {
+    const worldMap = countrys.map(country => (
+      <path
+        key={country.id}
+        d={country.shape}
+        style={{
+          fill: country.id === 'MX' || country.id === 'US' ? '#F0AB00' : '#eee',
+          cursor: 'pointer',
+          stroke: '#ccc',
+        }}
+        onClick={() => (this.selectedCountry(country))}
+      />
+    ));
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="100%"
+        viewBox="0 0 2000 1001"
+      >
+        MAPA
+        {worldMap}
+      </svg>
+    );
+  }
+}
+
+
 class Graphics extends React.Component {
   constructor(props) {
     super(props);
@@ -184,6 +225,12 @@ class Graphics extends React.Component {
               title="Objetivo mejor respondido"
               color=""
             />
+          </div>
+          <div className="chart-wrapper">
+            <Typography gutterBottom align="center">
+              Países con interacción
+            </Typography>
+            <Map />
           </div>
         </div>
 

@@ -22,7 +22,7 @@ const Objectives = () => (
       {`
         .objectives {
           display: grid;
-          grid-gap: 25px;
+          grid-gap: 30px;
           padding: 10%;
           grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
           padding-top: 110px;

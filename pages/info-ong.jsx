@@ -1,17 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
+import Grid from '@material-ui/core/Grid';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import NavigationBar from '../components/navigationBar';
 import programsOng from '../data/programs';
 
@@ -48,97 +40,69 @@ const paises = {
   México: 'https://user-images.githubusercontent.com/25912292/74392328-5ef4f380-4dcc-11ea-9e37-e0144815a498.png',
 };
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    margin: 0,
-    padding: 0,
-    paddingTop: '0px',
-  },
-  media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
-  },
-  position: {
-    marginTop: 120,
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-}));
-
 const InfoONG = (props) => {
-  const [expanded, setExpanded] = React.useState(false);
   const { programs } = props;
-  const classes = useStyles();
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   return (
     <div>
       <NavigationBar />
-      <section className="position">
-        { programs.programs.map(program => (
-          <Card className={classes.root} elevation={3}>
-            <CardHeader
-              title={program.program}
-            />
-            <CardMedia
-              className={classes.media}
-              image={program.image}
-            />
-            <CardContent>
-              <Typography variant="body2" color="textSecondary" component="p">
-                {program.text}
-              </Typography>
-              {program.ods.map(item => (
-                <IconButton>
-                  <span style={{ backgroundColor: color[item], color: 'white', padding: '2px' }}>{item}</span>
-                </IconButton>
-              ))}
-              {program.paises.map(pais => (
-                <IconButton style={{padding: '0px'}}>
-                  <img style={{width:'50%',margin: '0px'}} src={paises[pais]} />
-                </IconButton>
-              ))}
-            </CardContent>
-            <CardActions disableSpacing>
-              <IconButton aria-label="add to favorites">
-                <FavoriteIcon />
-              </IconButton>
-              <IconButton aria-label="share">
-                <ShareIcon />
-              </IconButton>
 
-              <IconButton
-                className={clsx(classes.expand, {
-                  [classes.expandOpen]: expanded,
-                })}
-                onClick={handleExpandClick}
-                aria-expanded={expanded}
-                aria-label="show more"
-              >
-                <ExpandMoreIcon />
-              </IconButton>
-            </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-              <CardContent>
-                <Typography paragraph>
-                  {program.more}
-                </Typography>
-              </CardContent>
-            </Collapse>
+      <section className="programs">
+        { programs.programs.map(program => (
+          <Card elevation={4}>
+            <CardContent>
+              <Grid container spacing={3} alignItems="center">
+                <Grid item xs={12}>
+                  <Typography variant="h4" gutterBottom align="center">
+                    {program.program}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={4} justify="center">
+                  <img src={program.image} alt={program.program} className="imagePresentation" />
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <Typography variant="h6" gutterBottom>
+                    {program.text}
+                  </Typography>
+                  <Typography variant="h6" gutterBottom>
+                    {program.more}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  {program.ods.map(item => (
+                    <IconButton>
+                      <span style={{ backgroundColor: color[item], color: 'white', padding: '4px' }}>{item}</span>
+                    </IconButton>
+                  ))}
+                  {program.paises.map(pais => (
+                    <IconButton style={{ padding: '0px' }}>
+                      <img style={{ width: '50%', margin: '0px' }} src={paises[pais]} alt={program.program} />
+                    </IconButton>
+                  ))}
+                </Grid>
+              </Grid>
+            </CardContent>
           </Card>
         ))}
       </section>
-
+      <style jsx>
+        {`
+          img.imagePresentation {
+            width:100%;
+          }
+          .programs {
+            display: grid;
+            grid-gap: 30px;
+            padding: 10%;
+            box-shadow: 3px 3px 3px grey;
+          }
+          @media screen and (max-width: 640px) and (min-width: 0px) {
+            .programs {
+              padding-top: 30%;
+            }
+          }
+        `}
+      </style>
       <style jsx global>
         {`
         body {
@@ -158,7 +122,6 @@ const InfoONG = (props) => {
 
 InfoONG.getInitialProps = async ({ query }) => {
   const programs = await programsOng[parseInt(query.id, 10) - 1];
-  console.log(programs.programs);
   return { programs };
 };
 
