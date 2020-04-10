@@ -13,12 +13,12 @@ const LatinCodeWeek = () => (
       { ongs.map(ong => (
         <Link href={`/info-ong/?id=${ong.index}`} key={ong.title}>
           <Paper elevation={3}>
-            <Grid container spacing={2} justify="center">
+            <Grid style={{padding:'5%'}} container spacing={2} justify="center">
               <Grid item xs={10} md={6}>
                 <img src={ong.logo} alt="" />
               </Grid>
               <Grid item xs={12} md={6}>
-                <Typography className="title" variant="h4" gutterBottom>
+                <Typography  className="title" variant="h4" gutterBottom>
                   {ong.name}
                 </Typography>
                 <Typography className="title" gutterBottom>
