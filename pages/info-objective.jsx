@@ -30,7 +30,7 @@ export default class extends React.Component {
         <NavigationBar />
 
         <div className="information">
-          <Card>
+          <Card elevation={4}>
             <CardContent>
               <Grid container spacing={3} alignItems="center">
                 <Grid item xs={12}>
