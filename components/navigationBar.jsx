@@ -53,6 +53,7 @@ const NavigationBar = () => (
         padding:  10px 0px 20px 0px ;
         text-align: center;
         height:70px;
+        box-shadow: 2px 2px 2px #ccc;
       }
       .menu ul {
         display:flex;
