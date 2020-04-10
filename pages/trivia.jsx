@@ -87,7 +87,7 @@ const Trivia = (props) => {
       <style jsx>
         {`
           .information {
-            padding: 15px;
+            padding: 10%;
             padding-top: 100px;
           }
         `}
