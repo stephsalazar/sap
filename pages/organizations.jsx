@@ -35,7 +35,7 @@ const LatinCodeWeek = () => (
         .ongs {
           display: grid;
           grid-gap: 25px;
-          padding: 15px;
+          padding: 10%;
           padding-top: 110px;
           align: center;
         }
