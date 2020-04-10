@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import React from 'react';
-import country from 'world-map-country-shapes';
 import Chart from 'chart.js';
 import Typography from '@material-ui/core/Typography';
+import countrys from '../map-world';
 import NavigationBar from '../components/navigationBar';
 
 const objetivos = [
@@ -163,25 +163,25 @@ class DoughnutChart extends React.Component {
 class Map extends React.Component {
   constructor(props) {
     super(props);
-    this.toggleCountry = this.toggleCountry.bind(this);
+    this.selectedCountry = this.selectedCountry.bind(this);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  toggleCountry(pais) {
-    console.log('PAIS', pais.id);
+  selectedCountry(country) {
+    console.log('country', country.id);
   }
 
   render() {
-    const mapCountries = country.map(pais => (
+    const worldMap = countrys.map(country => (
       <path
-        key={pais.id}
-        d={pais.shape}
+        key={country.id}
+        d={country.shape}
         style={{
-          fill: pais.id === 'MX' || pais.id === 'US' ? '#F0AB00' : '#eee',
+          fill: country.id === 'MX' || country.id === 'US' ? '#F0AB00' : '#eee',
           cursor: 'pointer',
           stroke: '#ccc',
         }}
-        onClick={() => (this.toggleCountry(pais))}
+        onClick={() => (this.selectedCountry(country))}
       />
     ));
     return (
@@ -191,7 +191,7 @@ class Map extends React.Component {
         viewBox="0 0 2000 1001"
       >
         MAPA
-        {mapCountries}
+        {worldMap}
       </svg>
     );
   }
