@@ -254,9 +254,6 @@ class Graphics extends React.Component {
               font-family: system-ui;
               background: #F7F7F7;
             }
-            .position {
-              padding: 100px;
-            }
           `}
         </style>
       </div>

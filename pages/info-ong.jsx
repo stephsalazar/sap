@@ -110,10 +110,6 @@ const InfoONG = (props) => {
           font-family: system-ui;
           background: #F7F7F7;
         }
-        .position {
-          padding-top:95px;
-          max-width:1090px;
-          margin: 0 auto;
       `}
       </style>
     </div>
