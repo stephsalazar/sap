@@ -1,5 +1,9 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 import NavigationBar from '../components/navigationBar';
 import RectangularCard from '../components/rectangularCard';
 import dataProyectos from '../data/latinCodeWeek';
@@ -23,79 +27,98 @@ const LatinCodeWeek = () => {
   return (
     <div>
       <NavigationBar />
+
       <div className="position">
-        <div className="">
-          <img src={dataProyectos.imagePresentation} className="imagePresentation" alt="dummy" />
-        </div>
-        <div className="infoPrincipal">
-          <h3>
-            Latin Code Week acerca a los jóvenes a las carreras de ciencia, tecnología,
-            ingeniería y matemáticas (STEM), para convertirse en la fuerza laboral de los
-            empleos del futuro. Más de 5,000 jóvenes han sido impactados gracias a este programa.
-          </h3>
-          <div className="containerCountrys">
-            {Object.keys(paises).map(pais => (<img src={paises[pais]} />))}
-          </div>
-        </div>
-        <Carousel data={dataProyectos.dataSlides} />
-        <section>
+        <Card elevation={4}>
+          <CardContent>
+            <Grid container alignItems="center" justify="center">
+              <Grid item xs={12} justify="center">
+                <Typography variant="h4" gutterBottom align="center">
+                  Latin Code Week
+                </Typography>
+                <img src={dataProyectos.imagePresentation} className="imagePresentation" alt="dummy" />
+              </Grid>
+              <Grid item xs={9}>
+                <Typography variant="h6" gutterBottom align="center">
+                  Latin Code Week acerca a los jóvenes a las carreras de ciencia, tecnología,
+                  ingeniería y matemáticas (STEM), para convertirse en la fuerza laboral de los
+                  empleos del futuro.
+                </Typography>
+                <Typography variant="h6" gutterBottom align="center">
+                  Más de 5,000 jóvenes han sido impactados gracias a este programa.
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <div className="containerCountrys">
+                  <div>
+                    {Object.keys(paises).map(pais => (<img src={paises[pais]} />))}
+                  </div>
+                </div>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+
+        <Card elevation={4}>
+          <CardContent>
+            <Grid container alignItems="center" justify="center">
+              <Grid item xs={12} md={7} justify="center">
+                <Carousel data={dataProyectos.dataSlides} />
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+
+        <Grid container spacing={3} alignItems="center">
           {dataProyectos.data.map(item => (
-            <RectangularCard
-              thumbnail={item.thumbnail}
-              title={item.title}
-              subtitle={item.subtitulo}
-              objective={item.objective}
-            />
+            <Grid item xs={12} sm={6}>
+              <RectangularCard
+                thumbnail={item.thumbnail}
+                title={item.title}
+                subtitle={item.subtitulo}
+                objective={item.objective}
+              />
+            </Grid>
           ))}
-        </section>
+        </Grid>
       </div>
 
+      <style jsx>
+        {`
+          img.imagePresentation {
+            width: 80%;
+            padding: 1% 10%;
+          }
+          .position {
+            display: grid;
+            grid-gap: 30px;
+            padding: 10%;
+          }
+          .containerCountrys {
+            align-items: center;
+            justify-content: center
+          }
+          .containerCountrys img{
+            width: 5%;
+            margin: 2%;
+          }
+          @media screen and (max-width: 640px) and (min-width: 0px) {
+            .containerCountrys img{
+              width:12%;
+              margin:3%;
+            }
+            .position {
+              padding-top: 35%;
+            }
+          }
+        `}
+      </style>
       <style jsx global>
         {`
         body {
           margin: 0;
           font-family: system-ui;
           background: #F7F7F7;
-        }
-        img.imagePresentation {
-          width:100%;
-        }
-        .position {
-          padding-top:95px;
-          max-width:1090px;
-          margin: 0 auto;
-
-        }
-        .infoPrincipal {
-          display:flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          text-align:center;
-          height: 400px;
-          margin: 0 auto;
-        }
-        .infoPrincipal h3 {
-          // text-align: center;
-          font-size: 20px;
-          padding: 0 10px 0 10px;
-          margin:  0 15px 0 15px;
-        }
-        .infoPrincipal img {
-          margin: 0 auto;
-        }
-        .containerCountrys {
-          display:flex;
-          flex-wrap: wrap;
-          align-items: center;
-          justify-content: center
-          max-width: 1090;
-          width:auto;
-        }
-        .containerCountrys img{
-          width:32px;
-          margin:5px;
-          // width:80%;
         }
       `}
       </style>
