@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MobileStepper from '@material-ui/core/MobileStepper';
-// import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -12,43 +12,38 @@ import PropTypes from 'prop-types';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
-    maxWidth: 1090,
-    flexGrow: 1,
-    paddingTop: '0px',
-    margin:'0 auto',
+    maxWidth: 1000,
+  },
+  carouselText: {
+    position: 'absolute',
+    right: 0,
+    left: 0,
+    bottom: 0,
+    zIndex: 10,
+    paddingTop: '20px',
+    paddingBottom: '20px',
+    color: '#fff',
+    textAlign: 'center',
+    background: 'rgba(0, 0, 0, 0.7)',
   },
   containerCarousel: {
     position: 'relative',
-    display:'flex',
+    display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
-    margin: '0 auto',
-    backgroundColor: 'rgba(255, 0, 0, 0.3)',
   },
-  textCarousel: {
-    position:'absolute',
-    fontSize: '25px',
-    color: 'black',
-    textShadow: '0px 0px 4px white',
-  },
-  
   img: {
-    display: 'block',
-    maxWidth: 1090,
-    overflow: 'hidden',
     width: '100%',
-    height: 'auto',
-    margin: '0 auto',
   },
 }));
 
 
 const Carousel = (props) => {
-  const  { data } = props;
+  const { data } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -67,11 +62,7 @@ const Carousel = (props) => {
   };
 
   return (
-    <div id="carousel" className={classes.root}>
-      {/* <Paper square elevation={0} className={classes.header}> */}
-        {/* <Typography>{data[activeStep].label}</Typography> */}
-      {/* </Paper> */}
-
+    <div className={classes.root}>
       <AutoPlaySwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={activeStep}
@@ -82,36 +73,39 @@ const Carousel = (props) => {
           <div key={step.label}>
             {Math.abs(activeStep - index) <= 2 ? (
               <div className={classes.containerCarousel}>
-                <Typography className={classes.textCarousel}>{data[activeStep].label}</Typography>
-                <img className={classes.img} src={step.imgPath} alt={step.label} />
+                <Grid container>
+                  <Grid item xs={12}>
+                    <img className={classes.img} src={step.imgPath} alt={step.label} />
+                    <Typography variant="body1" className={classes.carouselText}>{data[activeStep].label}</Typography>
+                  </Grid>
+                </Grid>
               </div>
             ) : null}
           </div>
         ))}
       </AutoPlaySwipeableViews>
       <MobileStepper
-        steps={maxSteps}	
-        position="static"	
-        variant="dots"	
-        activeStep={activeStep}	
-        nextButton={(	
+        steps={maxSteps}
+        position="static"
+        variant="dots"
+        activeStep={activeStep}
+        nextButton={(
           <Button size="small" onClick={handleNext} disabled={activeStep === maxSteps - 1}>
-            {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}	
-          </Button>	
-        )}	
-        backButton={(	
-          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>	
-            {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}	
-            
-          </Button>	
-        )}	
-      />	
+            {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+          </Button>
+        )}
+        backButton={(
+          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+            {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+          </Button>
+        )}
+      />
     </div>
   );
 };
 
 Carousel.propTypes = {
-  data:PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
-}
+  data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
+};
 
 export default Carousel;
