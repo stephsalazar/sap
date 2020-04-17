@@ -54,7 +54,7 @@ const LatinCodeWeek = () => (
         }
         @media screen and (max-width: 640px) and (min-width: 0px) {
           .ongs {
-            padding-top: 30%;
+            padding-top: 35%;
           }
         }
       `}
