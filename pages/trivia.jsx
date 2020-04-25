@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import Fab from '@material-ui/core/Fab';
 import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
-
+import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -17,6 +17,8 @@ import objectives from '../data/objectives';
 
 const Trivia = (props) => {
   const { objective } = props;
+  // eslint-disable-next-line prefer-const
+  let [contador, setContador] = React.useState(0);
   const [respuestas, setRespuestas] = React.useState([
     {
       Pregunta1: false,
@@ -36,6 +38,8 @@ const Trivia = (props) => {
     const newArr = [...respuestas]; // copying the old datas array
     newArr[Number(event.target.name.slice(8) - 1)][event.target.name] = event.target.value;
     localStorage.setItem('respuestas', JSON.stringify(newArr));
+    contador += 1;
+    setContador(contador);
     setRespuestas(newArr);
   };
 
@@ -49,40 +53,52 @@ const Trivia = (props) => {
             <Typography className="title" variant="h4" gutterBottom>
               {objective.title}
             </Typography>
-            {objective.trivia.map((trivia, index) => (
-              <Typography className="title" variant="h5" gutterBottom>
-                {trivia.pregunta}
-                    {trivia.respuestas.map((respuesta) => (
-                  <FormControl component="fieldset">
-                    <RadioGroup
-                      aria-label={`Pregunta${trivia.idPregunta}`}
-                      name={`Pregunta${trivia.idPregunta}`}
-                      value={respuestas[index][`Pregunta${trivia.idPregunta}`]}
-                      onChange={handleChange}
-                    >
-                      {/* <RadioGroup
-                      aria-label={objective.index}
-                      name={objective.index}
-                      value={value}
-                      onChange={handleChange}
-                    > */}
-                      <FormControlLabel value={respuesta} control={<Radio />} label={respuesta} />
-                    </RadioGroup>
-                  </FormControl>
-                ))}
-              </Typography>
-            ))}
+            {contador === 5
+              ? (
+                <Grid item xs={12} alignContent="center" alignItems="center">
+                  <Typography className="title" variant="h5" gutterBottom>
+                    ¡Conoce tus resultados!
+                  </Typography>
+                  <Link href={`/solutions-trivia/?id=${objective.index}`} key={objective.title}>
+                    <a className="objective">
+                      <Fab color="secondary" aria-label="add">
+                        <PlayArrowRoundedIcon />
+                      </Fab>
+                    </a>
+                  </Link>
+                </Grid>
+              )
+              : (
+                <Grid container>
+                  <Grid item xs={12}>
+                    <Typography className="title" variant="h5" gutterBottom>
+                      {objective.trivia[contador].pregunta}
+                    </Typography>
+                  </Grid>
+                  {objective.trivia[contador].respuestas.map(respuesta => (
+                    <Grid item xs={12}>
+                      <FormControl component="fieldset">
+                        <RadioGroup
+                          aria-label={`Pregunta${objective.trivia[contador].idPregunta}`}
+                          name={`Pregunta${objective.trivia[contador].idPregunta}`}
+                          value={respuestas[contador][`Pregunta${objective.trivia[contador].idPregunta}`]}
+                          onChange={handleChange}
+                        >
+                          <FormControlLabel
+                            value={respuesta}
+                            control={<Radio />}
+                            label={respuesta}
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
+                  ))}
+                </Grid>
+              )
+            }
           </CardContent>
-          <Link href={`/solutions-trivia/?id=${objective.index}`} key={objective.title}>
-            <a className="objective">
-              <Fab color="secondary" aria-label="add">
-                <PlayArrowRoundedIcon />
-              </Fab>
-            </a>
-          </Link>
         </Card>
       </div>
-
 
       <style jsx>
         {`
