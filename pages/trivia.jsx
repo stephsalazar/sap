@@ -2,7 +2,6 @@
 import React from 'react';
 import Link from 'next/link';
 import Fab from '@material-ui/core/Fab';
-import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -23,6 +22,8 @@ import objectives from '../data/objectives';
 
 const Trivia = (props) => {
   const { objective } = props;
+  const arrayResult = [];
+  let score = 0;
   // eslint-disable-next-line prefer-const
   let [contador, setContador] = React.useState(0);
   const [open, setOpen] = React.useState(false);
@@ -40,8 +41,6 @@ const Trivia = (props) => {
     },
   ]);
 
-  localStorage.setItem('respuestas', JSON.stringify(respuestas));
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -55,113 +54,147 @@ const Trivia = (props) => {
   const handleChange = (event) => {
     const newArr = [...respuestas]; // copying the old datas array
     newArr[Number(event.target.name.slice(8) - 1)][event.target.name] = event.target.value;
-    localStorage.setItem('respuestas', JSON.stringify(newArr));
     handleClickOpen();
     setRespuestas(newArr);
   };
 
+  const compareAnswers = () => {
+    for (let i = 0; i < respuestas.length; i += 1) {
+      if (objective.trivia[i].respuestaCorrecta === respuestas[i][`Pregunta${i + 1}`]) {
+        score += objective.trivia[i].puntaje;
+        arrayResult.push(objective.trivia[i].pregunta);
+      }
+    }
+  };
+  compareAnswers();
+
   return (
     <div>
       <NavigationBar />
+
       <div className="information">
-        <Card>
+        <Card elevation={4}>
           <CardContent>
-            <Typography className="title" variant="h3" gutterBottom>
-              {objective.title}
-            </Typography>
-            {contador === 5
-              ? (
-                <Grid item xs={12} alignContent="center" alignItems="center">
-                  <Typography className="title" variant="h5" gutterBottom>
-                    ¡Conoce tus resultados!
-                  </Typography>
-                  <Link href={`/solutions-trivia/?id=${objective.index}`} key={objective.title}>
-                    <a className="objective">
-                      <Fab color="secondary" aria-label="add">
-                        <PlayArrowRoundedIcon />
-                      </Fab>
-                    </a>
-                  </Link>
-                </Grid>
-              )
-              : (
-                <Grid container>
-                  <Grid item xs={12}>
-                    <Typography className="title" variant="h4" gutterBottom>
-                      Pregunta #
-                      {contador + 1}
-                      {' '}
-                    </Typography>
-                    <Typography className="title" variant="h6" gutterBottom>
-                      {objective.trivia[contador].pregunta}
-                    </Typography>
-                  </Grid>
-                  {objective.trivia[contador].respuestas.map(respuesta => (
-                    <Grid item xs={12}>
-                      <FormControl component="fieldset">
-                        <RadioGroup
-                          aria-label={`Pregunta${objective.trivia[contador].idPregunta}`}
-                          name={`Pregunta${objective.trivia[contador].idPregunta}`}
-                          value={respuestas[contador][`Pregunta${objective.trivia[contador].idPregunta}`]}
-                          onChange={handleChange}
-                        >
-                          <FormControlLabel
-                            value={respuesta}
-                            control={<Radio />}
-                            label={respuesta}
-                          />
-                        </RadioGroup>
-                      </FormControl>
+            <Grid container spacing={3} alignItems="center" justify="center">
+              <Grid item xs={12}>
+                <Typography variant="h4" gutterBottom align="center">
+                  {objective.title}
+                </Typography>
+              </Grid>
+
+              <Grid item xs={12}>
+                {contador === 5
+                  ? (
+                    <Grid container spacing={6} alignItems="center" justify="center">
+                      <Grid item xs={12} sm={6}>
+                        <img src={objective.image} className="imagePresentation" alt="dummy" />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Typography variant="h5" gutterBottom align="center">
+                          Respondiste bien
+                          {' '}
+                          {arrayResult.length}
+                          {' '}
+                          preguntas.
+                        </Typography>
+                        <Typography variant="h5" gutterBottom align="center">
+                          Y obtuviste
+                          {' '}
+                          {score}
+                          {' '}
+                          puntos.
+                        </Typography>
+                        <Typography gutterBottom align="center">
+                          <Link href="/objectives" key={objective.title} className="center">
+                            <a className="objective">
+                              <Fab color="secondary" aria-label="add" variant="extended">
+                                Ir a Objetivos
+                              </Fab>
+                            </a>
+                          </Link>
+                        </Typography>
+                      </Grid>
                     </Grid>
-                  ))}
-                  <Dialog
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                  >
-                    {objective.trivia[contador].respuestaCorrecta
-                      === Object.values(respuestas[contador])[0]
-                      ? (
-                        <>
-                          <DialogTitle id="alert-dialog-title">Correcto!</DialogTitle>
-                          <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                              <Typography className="title" variant="body1" gutterBottom>
-                                Has obtenido los siguientes puntos
-                              </Typography>
-                              <Typography className="title" variant="body1" gutterBottom>
-                                {objective.trivia[contador].puntaje}
-                              </Typography>
-                            </DialogContentText>
-                          </DialogContent>
-                        </>
-                      )
-                      : (
-                        <>
-                          <DialogTitle id="alert-dialog-title">Incorrecto!</DialogTitle>
-                          <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                              <Typography className="title" variant="body1" gutterBottom>
-                                La respuesta correcta es:
-                              </Typography>
-                              <Typography className="title" variant="body1" gutterBottom>
-                                {objective.trivia[contador].respuestaCorrecta}
-                              </Typography>
-                            </DialogContentText>
-                          </DialogContent>
-                        </>
-                      )
-                    }
-                    <DialogActions>
-                      <Button onClick={handleClose} color="primary" autoFocus>
-                        Siguiente
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
-                </Grid>
-              )
-            }
+                  )
+                  : (
+                    <Grid container>
+                      <Grid item xs={12}>
+                        <Typography variant="h6" gutterBottom>
+                          Pregunta
+                          {' '}
+                          {contador + 1}
+                          {': '}
+                          {objective.trivia[contador].pregunta}
+                        </Typography>
+                      </Grid>
+                      {objective.trivia[contador].respuestas.map(respuesta => (
+                        <Grid item xs={12} sm={6}>
+                          <FormControl component="fieldset">
+                            <RadioGroup
+                              aria-label={`Pregunta${objective.trivia[contador].idPregunta}`}
+                              name={`Pregunta${objective.trivia[contador].idPregunta}`}
+                              value={respuestas[contador][`Pregunta${objective.trivia[contador].idPregunta}`]}
+                              onChange={handleChange}
+                            >
+                              <FormControlLabel
+                                value={respuesta}
+                                control={<Radio />}
+                                label={respuesta}
+                              />
+                            </RadioGroup>
+                          </FormControl>
+                        </Grid>
+                      ))}
+                      <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                      >
+                        {objective.trivia[contador].respuestaCorrecta
+                          === Object.values(respuestas[contador])[0]
+                          ? (
+                            <>
+                              <DialogTitle id="alert-dialog-title">Correcto!</DialogTitle>
+                              <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                  <Typography variant="body1" gutterBottom>
+                                    Has obtenido los siguientes puntos
+                                  </Typography>
+                                  <Typography variant="body1" gutterBottom>
+                                    {objective.trivia[contador].puntaje}
+                                  </Typography>
+                                </DialogContentText>
+                              </DialogContent>
+                            </>
+                          )
+                          : (
+                            <>
+                              <DialogTitle id="alert-dialog-title">Incorrecto!</DialogTitle>
+                              <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                  <Typography variant="body1" gutterBottom>
+                                    La respuesta correcta es:
+                                  </Typography>
+                                  <Typography variant="body1" gutterBottom>
+                                    {objective.trivia[contador].respuestaCorrecta}
+                                  </Typography>
+                                </DialogContentText>
+                              </DialogContent>
+                            </>
+                          )
+                        }
+                        <DialogActions>
+                          <Button onClick={handleClose} color="primary" autoFocus>
+                            Siguiente
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                    </Grid>
+                  )
+                }
+              </Grid>
+            </Grid>
           </CardContent>
         </Card>
       </div>
@@ -170,7 +203,17 @@ const Trivia = (props) => {
         {`
           .information {
             padding: 10%;
-            padding-top: 100px;
+          }
+          img.imagePresentation {
+            width:100%;
+          }
+          .objective {
+            text-decoration: none;
+          }
+          @media screen and (max-width: 640px) and (min-width: 0px) {
+            .information {
+              padding-top: 30%;
+            }
           }
         `}
       </style>
